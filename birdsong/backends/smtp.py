@@ -37,7 +37,10 @@ class SendCampaignThread(Thread):
                     pk=self.campaign_pk).receipts.add(*fresh_contacts)
         except SMTPException:
             logger.exception(f"Problem sending campaign: {self.campaign_pk}")
-            self.campaign.status = CampaignStatus.FAILED
+            with transaction.atomic():
+                Campaign.objects.filter(pk=self.campaign_pk).update(
+                    status=CampaignStatus.FAILED,
+                )
         finally:
             close_old_connections()
 
