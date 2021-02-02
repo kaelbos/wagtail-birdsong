@@ -23,15 +23,17 @@ class EmailCampaignButtonHelper(ButtonHelper):
                 'classname': 'button button-small ' + classnames
             }
 
+        delete_btn = button('delete', 'Delete', 'no button-secondary')
+        copy_btn = button('copy', 'Copy', 'button-secondary')
+
         if campaign.status == CampaignStatus.SENDING:
             return [
                 button('preview', 'Preview', 'button-secondary icon icon-view'),
+                copy_btn,
+                delete_btn,
             ]
 
         sent = campaign.status != CampaignStatus.UNSENT
-
-        delete_btn = button('delete', 'Delete', 'no button-secondary')
-        copy_btn = button('copy', 'Copy', 'button-secondary')
         if not sent:
             buttons = [
                 button('edit', 'Edit', 'bicolor icon icon-edit'),
