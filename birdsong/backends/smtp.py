@@ -41,6 +41,10 @@ class SendCampaignThread(Thread):
                 Campaign.objects.filter(pk=self.campaign_pk).update(
                     status=CampaignStatus.FAILED,
                 )
+                fresh_contacts = Contact.objects.filter(
+                    pk__in=self.contact_pks)
+                Campaign.objects.get(
+                    pk=self.campaign_pk).receipts.add(*fresh_contacts)
         finally:
             close_old_connections()
 
